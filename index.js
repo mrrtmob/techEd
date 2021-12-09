@@ -29,29 +29,42 @@ const sever = express()
 sever.use(express.json())
 sever.use(express.urlencoded({ extended: true }))
 
+sever.post('/solutions', (req, res) => {
+  result = req.body.data;
+  var ans = [];
+  var st = [];
+  console.log(req.body.data)
+  const steps = mathsteps.solveEquation(req.body.data);
+
+  steps.forEach(step => {
+    st.push({
+      "title": step.changeType,
+      "value": step.newEquation.ascii()
+    });
+  });
+  console.log(steps[steps.length - 1].newEquation.ascii());
+  res.send({
+    "question": req.body.data,
+    "answer": steps[steps.length - 1].newEquation.ascii(),
+    "steps" : st
+  });
+
+});
 sever.post('/math', (req, res) => {
   result = req.body.data;
   var ans = [];
-  
+  var st = [];
   console.log(req.body.data)
   const steps = mathsteps.solveEquation(req.body.data);
-  steps.forEach(step => {
-    st = {
-      
-        "title" : [step.changeType],
-        "value" : step.newEquation.ascii()
-      
-       
-    };
-    ans.push(st);
-  });
-  console.log(result);
+  console.log(steps[steps.length - 1].newEquation.ascii());
   res.send({
-    ans
+    "question": req.body.data,
+    "answer": steps[steps.length - 1].newEquation.ascii(),
+    
   });
 
-})
-sever.listen(3000, function () {
+});
+sever.listen(8080, function () {
   console.log("Sever listen on port 3000");
 });
 
