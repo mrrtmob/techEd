@@ -37,7 +37,11 @@ sever.post('/math', (req, res) => {
   const steps = mathsteps.solveEquation(req.body.data);
   steps.forEach(step => {
     st = {
-      [step.changeType] : step.newEquation.ascii()
+      step : {
+        "title" : [step.changeType],
+        "value" : step.newEquation.ascii()
+      }
+       
     };
     ans.push(st);
   });
