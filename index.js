@@ -64,7 +64,7 @@ sever.post('/math', (req, res) => {
   });
 
 });
-sever.listen(8080, function () {
+sever.listen(3000, function () {
   console.log("Sever listen on port 3000");
 });
 
