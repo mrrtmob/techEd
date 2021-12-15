@@ -35,7 +35,7 @@ sever.post('/solutions', (req, res) => {
   var st = [];
   console.log(req.body.data)
   const steps = mathsteps.solveEquation(req.body.data);
-
+  st.push({ title:"ប្រធាន",value: req.body.data });
   steps.forEach(step => {
     st.push({
       "title": step.changeType,
@@ -46,7 +46,7 @@ sever.post('/solutions', (req, res) => {
   res.send({
     "question": req.body.data,
     "answer": steps[steps.length - 1].newEquation.ascii(),
-    "steps" : st
+    "steps": st
   });
 
 });
@@ -60,7 +60,7 @@ sever.post('/math', (req, res) => {
   res.send({
     "question": req.body.data,
     "answer": steps[steps.length - 1].newEquation.ascii(),
-    
+
   });
 
 });
