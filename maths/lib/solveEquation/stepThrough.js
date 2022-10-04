@@ -12,18 +12,18 @@ const simplifyExpressionNode = require('../simplifyExpression/stepThrough');
 const Symbols = require('../Symbols');
 
 const COMPARATOR_TO_FUNCTION = {
-  '=': function (left, right) { return left === right; },
-  '>': function (left, right) { return left > right; },
-  '>=': function (left, right) { return left >= right; },
-  '<': function (left, right) { return left < right; },
-  '<=': function (left, right) { return left <= right; },
+  '=': function(left, right) { return left === right; },
+  '>': function(left, right) { return left > right; },
+  '>=': function(left, right) { return left >= right; },
+  '<': function(left, right) { return left < right; },
+  '<=': function(left, right) { return left <= right; },
 };
 
 // Given a leftNode, rightNode and a comparator, will return the steps to get
 // the solution. Possible solutions include:
 // - solving for a variable (e.g. 'x=3' for '3x=4+5')
 // - the result of comparing values (e.g. 'true' for 3 = 3, 'false' for 3 < 2)
-function stepThrough(leftNode, rightNode, comparator, debug = false) {
+function stepThrough(leftNode, rightNode, comparator, debug=false) {
   let equation = new Equation(leftNode, rightNode, comparator);
 
   if (debug) {
@@ -33,7 +33,7 @@ function stepThrough(leftNode, rightNode, comparator, debug = false) {
 
   // we can't solve/find steps if there are any unsupported nodes
   if (checks.hasUnsupportedNodes(equation.leftNode) ||
-    checks.hasUnsupportedNodes(equation.rightNode)) {
+      checks.hasUnsupportedNodes(equation.rightNode)) {
     return [];
   }
 
@@ -111,8 +111,8 @@ function stepThrough(leftNode, rightNode, comparator, debug = false) {
       if (equationStatus.newEquation.ascii().length > 300) {
         // eslint-disable-next-line
         throw Error('Math error: Potential infinite loop for equation ' +
-          originalEquationStr + '. It reached over 300 characters ' +
-          ' long, so returning no steps');
+                    originalEquationStr +  '. It reached over 300 characters '+
+                    ' long, so returning no steps');
       }
       if (debug) {
         logSteps(equationStatus);
@@ -124,7 +124,7 @@ function stepThrough(leftNode, rightNode, comparator, debug = false) {
     if (iters++ === MAX_STEP_COUNT) {
       // eslint-disable-next-line
       console.error('Math error: Potential infinite loop for equation: ' +
-        originalEquationStr + ', returning no steps');
+                    originalEquationStr + ', returning no steps');
       return [];
     }
   } while (equationStatus.hasChanged());
@@ -146,9 +146,9 @@ function getRootsStatus(equation) {
   if (solutions.length > 1) {
     const flattenSolutionsList = [];
     solutions.forEach(s => s.items
-      ? flattenSolutionsList.push(...s.items)
-      : flattenSolutionsList.push(s));
-    allSolutions = Node.Creator.list(flattenSolutionsList);
+                      ? flattenSolutionsList.push(...s.items)
+                      : flattenSolutionsList.push(s));
+    allSolutions =  Node.Creator.list(flattenSolutionsList);
   }
   else if (solutions.length === 1) {
     allSolutions = solutions[0];
@@ -170,7 +170,7 @@ function getRootsStatus(equation) {
   TODO: handle multiple variable solutions e.g (x + 2) (y + 2) = 0
 */
 
-function getSolutionsAndSymbol(equation) {
+function getSolutionsAndSymbol (equation) {
   const leftNode = equation.leftNode;
 
   const solutions = [];
@@ -181,7 +181,7 @@ function getSolutionsAndSymbol(equation) {
   // then it is a factor. (e.g. 2^7 resolves to a constant so it is not a factor, but
   // x^2 would have factors x = 0)
   // If left hand side is a multiplication node, return a list of all the valid factors.
-  if (Node.Type.isOperator(leftNode, '^') && !checks.resolvesToConstant(leftNode)) {
+  if (Node.Type.isOperator(leftNode, '^') && !checks.resolvesToConstant(leftNode)){
     factorsWithSymbols = [leftNode];
   }
   else {
@@ -205,8 +205,8 @@ function getSolutionsAndSymbol(equation) {
     }
 
     const leftNode = Node.Type.isParenthesis(factor)
-      ? factor.content
-      : factor;
+          ? factor.content
+          : factor;
 
     steps = stepThrough(leftNode, equation.rightNode, '=');
 
@@ -237,7 +237,7 @@ function getSolutionsAndSymbol(equation) {
 
 // Given an equation of constants, will simplify both sides, returning
 // the steps and the result of the equation e.g. 'True' or 'False'
-function solveConstantEquation(equation, debug, steps = []) {
+function solveConstantEquation(equation, debug, steps=[]) {
   const compareFunction = COMPARATOR_TO_FUNCTION[equation.comparator];
 
   if (!compareFunction) {
@@ -257,9 +257,9 @@ function solveConstantEquation(equation, debug, steps = []) {
   equation.rightNode = removeUnnecessaryParens(equation.rightNode);
 
   if (!Node.Type.isConstantOrConstantFraction(equation.leftNode, true) ||
-    !Node.Type.isConstantOrConstantFraction(equation.rightNode, true)) {
+      !Node.Type.isConstantOrConstantFraction(equation.rightNode, true)) {
     throw Error('Expected both nodes to be constants, instead got: ' +
-      equation.ascii());
+                equation.ascii());
   }
 
   const leftValue = evaluate(equation.leftNode);
@@ -307,7 +307,7 @@ function step(equation, symbolName) {
 }
 
 // Simplifies the equation and returns the simplification steps
-function addSimplificationSteps(steps, equation, debug = false) {
+function addSimplificationSteps(steps, equation, debug=false) {
   let oldEquation = equation.clone();
 
   /*
@@ -323,8 +323,8 @@ function addSimplificationSteps(steps, equation, debug = false) {
   */
   const leftSimplifySteps = simplifyExpressionNode(equation.leftNode, false);
   const simplifiedLeftNode = leftSimplifySteps.length !== 0
-    ? leftSimplifySteps.slice(-1)[0].newNode
-    : equation.leftNode;
+        ? leftSimplifySteps.slice(-1)[0].newNode
+        : equation.leftNode;
   const leftFactorSteps = factor(simplifiedLeftNode, false);
 
   const leftSubSteps = [];

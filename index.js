@@ -1,7 +1,7 @@
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
-const mathsteps = require('./maths/index');
+const mathsteps = require('./maths')
 const tesseract = require("node-tesseract-ocr")
 const path = require('path')
 const options = {
@@ -20,11 +20,11 @@ const img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCd-4mI2kvX_x
 //     console.log("Result:", text)
 //   })
 //   .catch((error) => {
-//     console.log(error.message)
+//     console.log(error.message)/maths/index');
 //   })
 
 // var result = "";
-
+console.log(mathsteps.solveEquation('2x-3y=5'));
 const sever = express()
 sever.use(express.json())
 sever.use(express.urlencoded({ extended: true }))
@@ -63,7 +63,9 @@ sever.post('/math', (req, res) => {
 
   });
 
+  
 });
+
 sever.listen(3000, function () {
   console.log("Sever listen on port 3000");
 });
